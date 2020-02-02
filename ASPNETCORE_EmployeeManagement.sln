@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29709.97
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASPNETCORE_EmployeeManagement", "ASPNETCORE_EmployeeManagement\ASPNETCORE_EmployeeManagement.csproj", "{0A5B2BD6-4F75-48E8-83C0-20F6A5CD23B9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmployeeManagement_DataAccess", "EmployeeManagement_DataAccess\EmployeeManagement_DataAccess.csproj", "{2B5FCCE8-457D-43FF-B922-3DE65936129A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0A5B2BD6-4F75-48E8-83C0-20F6A5CD23B9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0A5B2BD6-4F75-48E8-83C0-20F6A5CD23B9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0A5B2BD6-4F75-48E8-83C0-20F6A5CD23B9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0A5B2BD6-4F75-48E8-83C0-20F6A5CD23B9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2B5FCCE8-457D-43FF-B922-3DE65936129A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2B5FCCE8-457D-43FF-B922-3DE65936129A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2B5FCCE8-457D-43FF-B922-3DE65936129A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2B5FCCE8-457D-43FF-B922-3DE65936129A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD0208D4-8221-4F3A-9867-D622B1332932}
+	EndGlobalSection
+EndGlobal
