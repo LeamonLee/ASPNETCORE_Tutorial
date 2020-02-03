@@ -6,6 +6,7 @@ using ASPNETCORE_EmployeeManagement.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;           // Leamon
@@ -30,6 +31,8 @@ namespace ASPNETCORE_EmployeeManagement
         // For more information on how to configure your application, visit https://go.microsoft.com/fwlink/?LinkID=398940
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<AppDbContext>();
 
             services.AddDbContextPool<AppDbContext>(
             options => options.UseSqlServer(_configuration.GetConnectionString("EmployeeDBConnection")));
@@ -79,6 +82,9 @@ namespace ASPNETCORE_EmployeeManagement
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Clear();
             //fileServerOptions.DefaultFilesOptions.DefaultFileNames.Add("index.html");
             app.UseFileServer();
+
+            // it's important we add authentication middleware before the MVC middleware in the request processing pipeline.
+            app.UseAuthentication();
 
             //app.UseMvcWithDefaultRoute();
 
