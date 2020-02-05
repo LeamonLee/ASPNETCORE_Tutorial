@@ -7,7 +7,11 @@ using System.Threading.Tasks;
 
 namespace ASPNETCORE_EmployeeManagement.Models
 {
-    public class AppDbContext : IdentityDbContext // it inherits from DbContext, but needs to install Microsoft.Aspnetcore.Identity.EntityFramework
+    //Specify ApplicationUser class as the generic argument for the IdentityDbContext class
+    //This is how the IdentityDbContext class knows it has to work with our custom user class (in this case 'ApplicationUser' class) 
+    //instead of the default built-in IdentityUser class. 
+    //But if we just use the built-in IdentityUser class, then we don't need to specify it as generic parameter.
+    public class AppDbContext : IdentityDbContext<ApplicationUser> // it inherits from DbContext, but needs to install Microsoft.Aspnetcore.Identity.EntityFramework
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
