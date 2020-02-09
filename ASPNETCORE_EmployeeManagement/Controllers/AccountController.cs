@@ -24,6 +24,14 @@ namespace ASPNETCORE_EmployeeManagement.Controllers
             this._signInManager = signInManager;
         }
 
+        [Route("AccessDenied")]
+        [HttpGet]
+        [AllowAnonymous]
+        public IActionResult AccessDenied()
+        {
+            return View();
+        }
+
         [Route("Register")]
         [HttpGet]
         [AllowAnonymous]
@@ -54,6 +62,14 @@ namespace ASPNETCORE_EmployeeManagement.Controllers
                 // SignInManager and redirect to index action of HomeController
                 if (result.Succeeded)
                 {
+                    // If the user is signed in and in the Admin role, then it is
+                    // the Admin user that is creating a new user. So redirect the
+                    // Admin user to ListRoles action
+                    if (_signInManager.IsSignedIn(User) && User.IsInRole("Admin"))
+                    {
+                        return RedirectToAction("ListUsers", "Administration");
+                    }
+
                     await this._signInManager.SignInAsync(user, isPersistent: false);
                     return RedirectToAction("Index", "Home");
                 }

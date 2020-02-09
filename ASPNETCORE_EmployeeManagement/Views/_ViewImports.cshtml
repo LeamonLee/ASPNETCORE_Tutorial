@@ -4,3 +4,6 @@
 
 @using Microsoft.AspNetCore.Identity
 @inject SignInManager<ApplicationUser> SignInManager
+
+@using Microsoft.AspNetCore.Authorization
+@inject IAuthorizationService authorizationService;

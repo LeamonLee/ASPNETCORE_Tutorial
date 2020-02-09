@@ -25,6 +25,15 @@ namespace ASPNETCORE_EmployeeManagement.Models
             // Identity tables are mapped in OnModelCreating method of IdentityDbContext class
             base.OnModelCreating(modelBuilder);
             modelBuilder.Seed();
+
+            //if you do not want to allow a role to be deleted, 
+            //if there are rows in the child table(AspNetUserRoles) which point to a role in the parent table(AspNetRoles).
+            //To achieve this, modify foreign keys DeleteBehavior to Restrict. We do this in OnModelCreating() method of AppDbContext class
+            //
+            foreach (var foreignKey in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                foreignKey.DeleteBehavior = DeleteBehavior.Restrict;
+            }
         }
     }
 }

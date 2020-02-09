@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using ASPNETCORE_EmployeeManagement.Models;
+using ASPNETCORE_EmployeeManagement.Security;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -40,6 +41,7 @@ namespace ASPNETCORE_EmployeeManagement
             //    options.Password.RequiredUniqueChars = 3;
             //    options.Password.RequireNonAlphanumeric = false;
             //});
+
             // Method2 to configure Password setting
             services.AddIdentity<ApplicationUser, IdentityRole>(options => {
                 options.Password.RequiredLength = 6;
@@ -47,6 +49,52 @@ namespace ASPNETCORE_EmployeeManagement
                 options.Password.RequireNonAlphanumeric = true;
             })
             .AddEntityFrameworkStores<AppDbContext>();
+
+            // The options parameter type is AuthorizationOptions
+            // Use AddPolicy() method to create the policy
+            // The first parameter is the name of the policy and the second parameter is the policy itself
+            // To satisfy this policy requirements, the logged-in user must have both "Delete Role" and "Create Role" claim
+            //
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("DeleteRolePolicy",
+                    policy => policy.RequireClaim("Delete Role")
+                                    .RequireClaim("Create Role"));
+                
+                // On the ListRoles view, we want to display Edit button ONLY IF the signed-in user has satisfied EditRolePolicy.
+                //
+                options.AddPolicy("EditRolePolicy", policy => policy.RequireClaim("Edit Role"));
+
+                // If the user is (in the Admin role 
+                // AND
+                // has Edit Role claim type with a claim value of true
+                // AND
+                // the logged -in user Id is NOT EQUAL TO the Id of the Admin user being edited)
+                // OR
+                // (the user is super-admin role)
+                options.AddPolicy("AdminEditRolePolicy", policy =>
+                                                            policy.AddRequirements(new ManageAdminRolesAndClaimsRequirement()));
+
+                // By default, all handlers are called, irrespective of what a handler returns(success, failure or nothing).
+                // This is because in the other handlers, there might be something else going on besides evaluating requirements, may be logging for example.
+                // If you do not want the rest of the handlers to be called, when a failure is returned, 
+                // set InvokeHandlersAfterFailure property to false. The default is true.
+                options.InvokeHandlersAfterFailure = false;
+            });
+
+            // Register the first ManageAdminRolesAndClaimsRequirement handler
+            services.AddSingleton<IAuthorizationHandler,
+                                    CanEditOnlyOtherAdminRolesAndClaimsHandler>();
+
+            // Register the second ManageAdminRolesAndClaimsRequirement handler
+            services.AddSingleton<IAuthorizationHandler, SuperAdminHandler>();
+
+            // To change the default access denied route, modify the code below
+            // if we try to access an unauthorized resource, we will be redirected to /Administration/AccessDenied path.
+            services.ConfigureApplicationCookie(options =>
+            {
+                options.AccessDeniedPath = new PathString("/Administration/AccessDenied");
+            });
 
             services.AddDbContextPool<AppDbContext>(
                 options => options.UseSqlServer(_configuration.GetConnectionString("EmployeeDBConnection"))
